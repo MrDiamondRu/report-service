@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: report-service
+  servlet:
+    multipart:
+      enabled: true
+      location: ${java.io.tmpdir}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:postgresql://postgres:5432/report-service-db
+    username: postgres
+    password: P@ss
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/migration/changelog.xml
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.0.199:8484/auth/realms/Jupiter
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: report-service
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.0.199:8484/auth/realms/Jupiter
+
+server:
+  port: 8053
+  error:
+    whitelabel:
+      enabled: false
+
+js-report:
+  url: http://jsreport:5488
+
+higina-database-query-tool:
+  url: http://sqlquerytool:8052/api/report
+
+template:
+  journal:
+    term-template-file: /mount_dir/report/journal_term.xlsx
+    rem-template-file: /mount_dir/report/journal_rem.xlsx
+  inventory:
+    template-file: /mount_dir/report/inventory.xlsx
+  credit:
+    template-file: /mount_dir/report/credit.xlsx
